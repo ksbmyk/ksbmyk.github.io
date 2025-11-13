@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chobishiba - Creative Coder & Rubyist</title>
+    <meta name="description" content="Creative Coder & Rubyist / コードから生まれる表現を探求">
+    <!-- 
+    将来的なサイト構成:
+    /
+    ├── index.html (このページ)
+    ├── sketch/ (日々のスケッチ)
+    ├── projects/ (主要プロジェクト詳細)
+    │   ├── tangible-code.html
+    │   ├── digital-springboard.html
+    │   └── fractal-flower.html
+    └── assets/
+        ├── works/ (作品画像・動画)
+        └── activities/ (活動記録画像)
+    -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            background: #f8f8f8;
+        }
+        
+        :root {
+            --bg-primary: #f8f8f8;    /* sketchページと統一 */
+            --bg-secondary: #ffffff;   /* カード背景 */
+            --text-primary: #333333;   /* メインテキスト */
+            --text-secondary: #666666; /* サブテキスト */
+            --accent: #00447c;        /* より濃い紺色 */
+            --accent-hover: #003366;  /* ホバー時 */
+            --border: #e1e4e8;        /* ボーダー */
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header with social links */
+        .header-nav {
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .social-link {
+            color: #002851;  /* OpenProcessingアイコンと同じ濃紺 */
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .social-link:hover {
+            opacity: 0.8;
+        }
+        
+        .social-link:last-child {
+            margin-left: auto;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+        
+        .hero-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+        
+        .hero-description .highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+        
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link {
+            padding: 10px 24px;
+            border: 1px solid #444;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        
+        .quick-link:hover {
+            border-color: #666;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .quick-link.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .quick-link.primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+        
+        /* Recent Highlights */
+        .highlights {
+            padding: 60px 0;
+            background: var(--bg-primary);
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .highlight-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0;
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+        
+        .highlight-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .highlight-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: #f0f0f0;
+            position: relative;
+        }
+        
+        .highlight-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .highlight-card:hover .highlight-image img {
+            transform: scale(1.05);
+        }
+        
+        .highlight-content {
+            padding: 25px;
+        }
+        
+        .highlight-tech {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .tech-tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+        
+        .highlight-label {
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .highlight-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+        
+        .highlight-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .highlight-links {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-links a {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 4px 0;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .highlight-links a:hover {
+            border-bottom-color: var(--accent);
+        }
+        
+        /* PicoRuby LED Works */
+        .led-works-section {
+            padding: 60px 0;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+        }
+        
+        .led-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .led-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        .led-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .led-media {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .led-media img,
+        .led-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .led-info {
+            padding: 15px;
+        }
+        
+        .led-title {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .led-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Daily Sketches Preview */
+        .works-section {
+            padding: 60px 0;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+        
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .work-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .work-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .work-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .work-placeholder {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #00447c 0%, #002244 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        /* Activities Timeline */
+        .activities {
+            padding: 60px 0;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+        
+        .activity-year {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .activity-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .activity-month {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        
+        .activity-title {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .activity-type {
+            display: inline-block;
+            padding: 3px 10px;
+            margin-right: 10px;
+            font-size: 0.75rem;
+            border-radius: 12px;
+            background: #333;
+            color: #999;
+            font-weight: 500;
+        }
+        
+        .type-exhibition { background: #e3f2fd; color: #1565c0; }
+        .type-talk { background: #fce4ec; color: #ad1457; }
+        .type-lt { background: #f3e5f5; color: #6a1b9a; }
+        .type-workshop { background: #fff3e0; color: #e65100; }
+        .type-award { background: #ffe0b2; color: #e65100; }
+        .type-participation { background: #e8f5e9; color: #2e7d32; }
+        .type-coach { background: #e0f2f1; color: #00695c; }
+        .type-complete { background: #fafafa; color: #616161; }
+        
+        .activity-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        
+        .activity-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .activity-link:hover {
+            text-decoration: underline;
+        }
+
+        .activity-link svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--accent);
+            transition: opacity 0.2s;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        .activity-link:hover svg {
+            opacity: 0.8;
+        }
+
+        /* ダークモード対応も簡単 */
+        @media (prefers-color-scheme: dark) {
+            .activity-link svg {
+                fill: #6ba3e5;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            background: white;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-link:hover {
+            color: var(--accent);
+        }
+        
+        .footer-copy {
+            color: #777;
+            font-size: 0.85rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .works-grid { grid-template-columns: 1fr; }
+            .highlight-grid { grid-template-columns: 1fr; }
+            .led-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Navigation -->
+          <nav class="header-nav">
+              <a href="/" class="logo">chobishiba</a>
+              <a href="https://ksbmyk.github.io/sketch/" class="nav-link">sketch</a>
+          </nav>
+                  
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">chobishiba</h1>
+            <div class="hero-subtitle">Creative Coder & Rubyist</div>
+            <div class="hero-description">
+                <span class="highlight">コードから生まれる表現</span>を探求しています。<br>
+                Ruby、p5.js、PicoRubyを主軸に、スクリーンからフィジカルまで<br>
+                プログラミングの創造性を追求。
+            </div>
+            <div class="quick-links">
+              <a href="https://ksbmyk.github.io/sketch/" class="quick-link primary">Daily Sketches</a>
+              <a href="https://neort.io/@chobishiba" class="quick-link">NEORT++</a>
+              <a href="https://github.com/ksbmyk" class="quick-link">GitHub</a>
+              <a href="https://twitter.com/chobishiba" class="quick-link">X/Twitter</a>
+              <a href="https://www.instagram.com/chobishiba" class="quick-link" target="_blank">Instagram</a>
+              <a href="#activities" class="quick-link">Activities</a>
+            </div>
+        </section>
+        
+        <!-- Recent Highlights -->
+        <section class="highlights">
+            <h2 class="section-title">Recent Highlights</h2>
+            <div class="highlight-grid">
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="assets/works/roundel-bloom-thumbnail.jpg" alt="Roundel Bloom 玉川髙島屋S・C LEDキューブビジョン">
+                    </div>
+                    <div class="highlight-content">
+                        <div class="highlight-label">Exhibition 2025 Aug</div>
+                        <div class="highlight-title">Roundel Bloom</div>
+                        <div class="highlight-description">
+                            玉川髙島屋S・C LEDキューブビジョンでのリアルタイム生成作品
+                        </div>
+                        <div class="highlight-tech">
+                            <span class="tech-tag">p5.js</span>
+                            <span class="tech-tag">Realtime</span>
+                            <span class="tech-tag">LED Cube</span>
+                        </div>
+                        <div class="highlight-links">
+                            <a href="https://note.com/chobishiba/n/ne502b2137000" target="_blank">制作記事 →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="assets/works/digital-springboard-thumbnail.jpg" alt="DIGITAL SPRINGBOARD Vol.2 渋谷デジタルサイネージ展示">
+                    </div>
+                    <div class="highlight-content">
+                        <div class="highlight-label">Exhibition 2025 Sep</div>
+                        <div class="highlight-title">DIGITAL SPRINGBOARD Vol.2 選出</div>
+                        <div class="highlight-description">
+                            虎ノ門ヒルズでのNEORTキュレーション展示に選出
+                        </div>
+                        <div class="highlight-tech">
+                            <span class="tech-tag">p5.js</span>
+                            <span class="tech-tag">Generative Art</span>
+                        </div>
+                        <div class="highlight-links">
+                            <a href="https://neort.io/@chobishiba" target="_blank">NEORT →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-image">
+                        <img src="assets/works/tangible-code-exhibition.jpg" alt="Tangible Code 卒業制作展">
+                    </div>
+                    <div class="highlight-content">
+                        <div class="highlight-label">Exhibition 2025 Mar</div>
+                        <div class="highlight-title">卒業制作展『Tangible Code』</div>
+                        <div class="highlight-description">
+                            武蔵野美術大学通信課程卒業制作。コードと触覚の新しい関係性を探求
+                        </div>
+                        <div class="highlight-tech">
+                            <span class="tech-tag">Ruby</span>
+                            <span class="tech-tag">PicoRuby</span>
+                            <span class="tech-tag">Physical Computing</span>
+                        </div>
+                        <div class="highlight-links">
+                            <a href="https://twitter.com/chobishiba" target="_blank">展示記録 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Daily Sketches Preview -->
+        <section class="works-section">
+            <div class="container">
+                <h2 class="section-title">Daily Sketches</h2>
+                <p style="text-align: center; color: #666; margin: -20px 0 30px; font-size: 0.95rem;">
+                    Rubyでのクリエイティブコーディング
+                </p>
+                <div class="works-grid">
+                    <a href="https://ksbmyk.github.io/sketch/" class="work-card">
+                        <div class="work-image">
+                            <img src="assets/works/sketch-01.jpg" alt="Daily Sketch 1">
+                        </div>
+                    </a>
+                    <a href="https://ksbmyk.github.io/sketch/" class="work-card">
+                        <div class="work-image">
+                            <img src="assets/works/sketch-02.jpg" alt="Daily Sketch 2">
+                        </div>
+                    </a>
+                    <a href="https://ksbmyk.github.io/sketch/" class="work-card">
+                        <div class="work-image">
+                            <img src="assets/works/sketch-03.jpg" alt="Daily Sketch 3">
+                        </div>
+                    </a>
+                </div>
+                <div style="text-align: center;">
+                    <a href="https://ksbmyk.github.io/sketch/" style="color: #00447c; text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                        View All Sketches →
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- PicoRuby LED Works -->
+        <section class="led-works-section">
+            <div class="container">
+                <h2 class="section-title">PicoRuby LED Works</h2>
+                <p style="text-align: center; color: #666; margin: -20px 0 30px; font-size: 0.95rem;">
+                    PicoRubyとAtomMatrixを使った5×5 LED作品
+                </p>
+                <div class="led-grid">
+                    <div class="led-card">
+                        <div class="led-media">
+                            <img src="assets/works/led-work-01.jpg" alt="PicoRuby LED作品 1">
+                        </div>
+                    </div>
+                    <div class="led-card">
+                        <div class="led-media">
+                            <img src="assets/works/led-work-02.jpg" alt="PicoRuby LED作品 2">
+                        </div>
+                    </div>
+                    <div class="led-card">
+                        <div class="led-media">
+                            <img src="assets/works/led-work-03.jpg" alt="PicoRuby LED作品 3">
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <a href="/led-works/" style="color: #00447c; text-decoration: none; font-weight: 500;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                        View All LED Works →
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Activities Timeline -->
+        <section id="activities" class="activities">
+            <div class="container">
+                <h2 class="section-title">Activities</h2>
+                
+                <div class="activity-year">2025</div>
+
+                <div class="activity-item">
+                    <div class="activity-month">November</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-workshop">Workshop</span>
+                        mruby Girls Matsue 1st
+                    </div>
+                    <div class="activity-meta">
+                        PicoRubyとAtom Matrixを使った女性向けワークショップ。オーガナイザー
+                    </div>
+                    <div class="activity-meta">
+                        <a href="https://mrubygirls.github.io/events/2025-11-08-matsue_1st" class="activity-link" target="_blank">
+                            公式サイト →
+                        </a>
+                        /
+                        <a href="https://mrubygirls.github.io/guides/esp32/" class="activity-link" target="_blank">
+                          ガイド →
+                        </a> 
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-month">November</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-talk">Talk</span>
+                        RubyWorld Conference 2025 登壇
+                    </div>
+                    <div class="activity-meta">
+                        卒業制作『Tangible Code』について発表
+                    </div>
+                    <div class="activity-meta">
+                        <a href="https://2025.rubyworld-conf.org/" class="activity-link" target="_blank">
+                            公式サイト →
+                        </a>
+                        /
+                        <a href="https://speakerdeck.com/chobishiba/tangible-code" class="activity-link" target="_blank">
+                          スライド →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-month">September</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-award">Award</span>
+                        DIGITAL SPRINGBOARD Vol.2 選出
+                    </div>
+                    <div class="activity-meta">
+                        「春.has_come?」Works displayed Sep 19-Oct 5
+                    </div>
+                    <div class="activity-meta">
+                        <a href="https://neort.io/challenge/d2m1f4mdkg0sehilnig0" class="activity-link" target="_blank">
+                            GitHub →
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-month">July</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-talk">Talk</span>
+                        PicoRubyOverflow会議 登壇
+                    </div>
+                    <div class="activity-meta">
+                      PicoRuby × Physical Computing作品の実演
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                  <div class="activity-month">June</div>
+                  <div class="activity-title">
+                      <span class="activity-type type-talk">Talk</span>
+                      関西Ruby会議08 前夜祭 登壇
+                  </div>
+                  <div class="activity-meta">
+                      PicoRuby × Physical Computing作品の実演
+                  </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-month">April</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-award">Award</span>
+                        TRICK 2025 - Best Repetition 選外佳作
+                    </div>
+                    <div class="activity-meta">
+                        <a href="https://github.com/tric/trick2025" class="activity-link" target="_blank">
+                            GitHub →
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                  <div class="activity-month">March</div>
+                  <div class="activity-title">
+                      <span class="activity-type type-exhibition">Exhibition</span>
+                      広告募集広告
+                  </div>
+                  <div class="activity-meta">
+                      KITTE大阪 NEORTキュレーション展示に選出
+                  </div>
+                  <div class="activity-links">
+                    <a href="https://neort.io/challenge/cuupks4n70rs0t8mq2g0" class="activity-link" target="_blank">
+                      詳細 →
+                    </a>
+                  </div>
+                </div>
+
+                <div class="activity-item">
+                  <div class="activity-month">March</div>
+                  <div class="activity-title">
+                      <span class="activity-type type-exhibition">Exhibition</span>
+                      武蔵野美術大学 卒業制作展
+                  </div>
+                  <div class="activity-meta">
+                      作品『Tangible Code』- コードと触覚の新しい関係性を探求
+                  </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-month">February</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-participation">Event</span>
+                        DIG SHIBUYA 2025 参加
+                    </div>
+                    <div class="activity-meta">
+                        <a href="https://digshibuya.com/" class="activity-link" target="_blank">
+                            公式サイト →
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-month">January</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-workshop">Workshop</span>
+                        東京Ruby会議12 クリエイティブコーディングワークショップ講師
+                    </div>
+                    <div class="activity-meta">
+                      <a href="https://esa-pages.io/p/sharing/12222/posts/1855/b241ddaf7cae57cfb247.html" class="activity-link" target="_blank"></a>
+                      資料 ->
+                      </span>
+                  </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-month">January</div>
+                    <div class="activity-title">
+                        <span class="activity-type type-participation">Complete</span>
+                        Genuary 2025 完走
+                    </div>
+                </div>
+                
+
+                
+                <!-- もっと詳しい活動履歴 -->
+                <!-- <div style="text-align: center; margin: 40px 0; padding: 20px; border-top: 1px solid #e1e4e8;"> -->
+                    <details style="max-width: 800px; margin: 0 auto; text-align: left;">
+                        <summary style="cursor: pointer; color: #00447c; font-weight: 500; padding: 10px 0;">
+                            ↓ 2024年以前の活動を見る
+                        </summary>
+                        <div style="margin-top: 20px;">
+
+                          <div class="activity-year">2024</div>
+                            <div class="activity-item">
+                                <div class="activity-month">December</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-participation">Event</span>
+                                    Processing Advent Calendar 2024 参加
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">November</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-talk">Talk</span>
+                                    RubyWorld Conference 2024 登壇
+                                </div>
+                                <div class="activity-meta">
+                                    <a href="https://2024.rubyworld-conf.org/ja/program/day1/" class="activity-link" target="_blank">
+                                        プログラム →
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">October</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-lt">LT</span>
+                                    YAPC::Hakodate 2024 LT
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">August</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-exhibition">Exhibition</span>
+                                    CIVIC CANVAS Vol.1
+                                </div>
+                                <div class="activity-meta">
+                                  Shibuya Sakura Stage にて作品『fractal flower』上映
+                              </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">June</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-workshop">Workshop</span>
+                                    清泉女学院中学高等学校 プログラミング授業講師
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">May</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-talk">LT</span>
+                                    RubyKaigi 2024 LT
+                                </div>
+                                <div class="activity-meta">
+                                    <a href="https://rubykaigi.org/2024/" class="activity-link" target="_blank">
+                                        公式サイト →
+                                    </a>
+                                    /
+                                    <a href="https://rubykaigi.org/2024/" class="activity-link" target="_blank">
+                                      スライド →
+                                  </a>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">May</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-workshop">Workshop</span>
+                                    Waffle Festival 2024 プログラミングワークショップ講師
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">March</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-workshop">Workshop</span>
+                                    Rails Girls Tokyo 16th コーチ & LT
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-month">January</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-participation">Complete</span>
+                                    Genuary 2024 完走
+                                </div>
+                            </div>
+
+
+                          <div class="activity-year">2023</div>
+                            <div class="activity-item">
+                              <div class="activity-month">December</div>
+                              <div class="activity-title">
+                                  <span class="activity-type type-exhibition">Exhibition</span>
+                                  『NEORT』×『Pop Up! YohaS』Digital Art Show
+                              </div>
+                            </div>
+                          
+                            <div class="activity-item">
+                              <div class="activity-month">September</div>
+                              <div class="activity-title">
+                                  <span class="activity-type type-talk">Talk</span>
+                                  大阪Ruby会議03
+                              </div>
+                            </div>
+
+                          <div class="activity-year">2019</div>
+                            <div class="activity-item">
+                                <div class="activity-month">September</div>
+                                <div class="activity-title">
+                                    <span class="activity-type type-participation">Start</span>
+                                    rbp5js作成
+                                </div>
+                                <div class="activity-meta">
+                                    RubyKaigi 2019のセッションに触発され、Rubyでprocessingを動かせないかの探究を始める
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                <!-- </div> -->
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-copy">
+                © 2025 chobishiba
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
